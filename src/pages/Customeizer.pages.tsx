@@ -10,9 +10,46 @@ import downloadImage from '../assets/download.png';
 import config from '../config/config'
 import state from '../store/index.store'
 
+type StatePropsType = Exclude<PropertyKey, number | symbol>
+
+type ActiveFilterTabType = { logoShirt: boolean, stylishShirt: boolean };
+
+type ActiveEditorTabPropertyType = 'colorpicker' | 'filepicker' | 'aipicker';
+
 const Customeizer = () => {
 
     const snap = useSnapshot(state);
+    // * handle the file state 
+    const [file, setFile] = React.useState<StatePropsType>('');
+
+    const [prompt, setPrompt] = React.useState<StatePropsType>("");
+
+    const [generatingImg, setGeneratingImg] = React.useState<boolean>(false);
+
+    const [activeEditorTab, setActiveEditorTab] = React.useState<StatePropsType>('');
+
+    const [activeFilterTav, setActiveFilterTab] = React.useState<ActiveFilterTabType>({
+        logoShirt: true,
+        stylishShirt: false,
+    });
+
+
+
+
+    // * show tab content depending on the activeTab
+    const generateTabContent = () => {
+        switch (activeEditorTab) {
+            case 'colorpicker':
+                return <ColorPicker />
+            case 'filepicker':
+                return <FilePicker />
+            case 'aipicker':
+                return <AIPicker />
+
+            default:
+                return null
+        }
+    }
     return (
         <AnimatePresence>
             {
@@ -30,9 +67,12 @@ const Customeizer = () => {
                                             <Tab
                                                 key={tab.name}
                                                 tab={tab}
-                                                handleClick={() => { }}
+                                                handleClick={() => setActiveEditorTab(tab.name)}
                                             />
                                         ))
+                                    }
+                                    {
+                                        generateTabContent()
                                     }
                                 </div>
                             </div>
@@ -61,7 +101,7 @@ const Customeizer = () => {
                                     <Tab
                                         key={tab.name}
                                         tab={tab}
-                                        isFilterTab=''
+                                        isFilterTab
                                         isActiveTab=''
                                         handleClick={() => { }}
                                     />
