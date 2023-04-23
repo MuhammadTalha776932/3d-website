@@ -9,7 +9,7 @@ interface ITabProps {
     tab: ITabs;
     handleClick: MouseEventHandler<HTMLDivElement>;
     isFilterTab?: boolean;
-    isActiveTab?: string;
+    isActiveTab?: string ;
 }
 
 const Tab = ({ handleClick, tab, isActiveTab, isFilterTab }: ITabProps) => {

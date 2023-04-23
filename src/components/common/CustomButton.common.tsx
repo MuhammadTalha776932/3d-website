@@ -1,7 +1,7 @@
-import * as React from "react";
-
-import state from "../../store/index.store";
+import { getContrastingColor } from "../../config/helpers";
 import { useSnapshot } from "valtio";
+import * as React from "react";
+import state from "../../store/index.store";
 
 interface ICustomeButtonProps {
     type: string
@@ -20,12 +20,19 @@ const CustomButton = ({ type, title, customStyles, handleClick }: ICustomeButton
         if (type === "filled") {
             const CustomButtonStyling: React.CSSProperties = {
                 backgroundColor: snap.color,
-                color: "#fff",
+                color: getContrastingColor(snap.color),
             }
 
             return {
                 ...CustomButtonStyling
             }
+        } else if (type === "outline") {
+            const CustomButtonOutlineStyle: React.CSSProperties = {
+                borderWidth: "1px",
+                borderColor: snap.color,
+                color: snap.color,
+            }
+            return CustomButtonOutlineStyle
         }
     }
 

@@ -3,12 +3,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useSnapshot } from 'valtio'
 import { downloadCanvasToImage, reader } from '../config/helpers'
 import { fadeAnimation, slideAnimation } from '../config/motion'
-import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants'
+import { EditorTabs, FilterTabs, DecalTypes, IDecalTypes, ITabs, } from '../config/constants'
 import { AIPicker, ColorPicker, FilePicker } from '../components/index.component'
 import { CustomButton, Tab } from '../components/common/index.common'
 import downloadImage from '../assets/download.png';
 import config from '../config/config'
-import state from '../store/index.store'
+import state, { IState } from '../store/index.store'
 
 type StatePropsType = Exclude<PropertyKey, number | symbol>
 
@@ -28,7 +28,7 @@ const Customeizer = () => {
 
     const [activeEditorTab, setActiveEditorTab] = React.useState<StatePropsType>('');
 
-    const [activeFilterTav, setActiveFilterTab] = React.useState<ActiveFilterTabType>({
+    const [activeFilterTab, setActiveFilterTab] = React.useState<ActiveFilterTabType>({
         logoShirt: true,
         stylishShirt: false,
     });
@@ -42,7 +42,11 @@ const Customeizer = () => {
             case 'colorpicker':
                 return <ColorPicker />
             case 'filepicker':
-                return <FilePicker />
+                return <FilePicker
+                    file={file}
+                    setFile={setFile}
+                    readFile={readFile}
+                />
             case 'aipicker':
                 return <AIPicker />
 
@@ -50,6 +54,49 @@ const Customeizer = () => {
                 return null
         }
     }
+
+    const handleActiveFilterTab = (tabName: string) => {
+
+        switch (tabName) {
+            case 'logoShirt':
+                state.isLogoTexture = !activeFilterTab[tabName];
+                break;
+            case 'stylishShirt':
+                state.isFullTexture = activeFilterTab[tabName];
+                break;
+
+            default:
+                state.isLogoTexture = true;
+                state.isFullTexture = false;
+        }
+        // ? after setting the state, activeFilterTab is updated
+
+        setActiveFilterTab((prevState) => {
+            return {
+                ...prevState,
+                [tabName as keyof ActiveFilterTabType]: !prevState[tabName as keyof ActiveFilterTabType]
+            }
+        })
+    }
+
+    const handleDecals = (type: string, result: never) => {
+        const decalType = DecalTypes[type as keyof IDecalTypes];
+
+        state[decalType.stateProperty as string as keyof IState] = result;
+
+        if (!activeFilterTab[decalType.filterTab as keyof ActiveFilterTabType]) {
+            handleActiveFilterTab(decalType.filterTab);
+        }
+    }
+
+    const readFile = (type: string) => {
+        reader(file)
+            .then((result) => {
+                handleDecals(type, result as never);
+                setActiveEditorTab("");
+            })
+    }
+
     return (
         <AnimatePresence>
             {
@@ -102,8 +149,8 @@ const Customeizer = () => {
                                         key={tab.name}
                                         tab={tab}
                                         isFilterTab
-                                        isActiveTab=''
-                                        handleClick={() => { }}
+                                        isActiveTab={activeEditorTab[tab.name as keyof typeof activeEditorTab]?.toString()}
+                                        handleClick={() => handleActiveFilterTab(tab.name)}
                                     />
                                 ))
                             }

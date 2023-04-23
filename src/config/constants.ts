@@ -37,7 +37,7 @@ export const FilterTabs: ITabs[] = [
   },
 ];
 
-interface IDecalTypesNestedProperty {
+export interface IDecalTypesNestedProperty {
   stateProperty: string;
   filterTab: string;
 }
