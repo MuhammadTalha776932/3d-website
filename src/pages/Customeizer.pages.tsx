@@ -1,30 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSnapshot } from 'valtio'
-import { downloadCanvasToImage, reader } from '../config/helpers'
+import { reader } from '../config/helpers'
 import { fadeAnimation, slideAnimation } from '../config/motion'
-import { EditorTabs, FilterTabs, DecalTypes, IDecalTypes, ITabs, } from '../config/constants'
-import { AIPicker, ColorPicker, FilePicker } from '../components/index.component'
+import { EditorTabs, FilterTabs, DecalTypes, IDecalTypes, } from '../config/constants'
+import { ColorPicker, FilePicker } from '../components/index.component'
 import { CustomButton, Tab } from '../components/common/index.common'
-import downloadImage from '../assets/download.png';
-import config from '../config/config'
+
 import state, { IState } from '../store/index.store'
 
 type StatePropsType = Exclude<PropertyKey, number | symbol>
 
 type ActiveFilterTabType = { logoShirt: boolean, stylishShirt: boolean };
 
-type ActiveEditorTabPropertyType = 'colorpicker' | 'filepicker' | 'aipicker';
-
 const Customeizer = () => {
 
     const snap = useSnapshot(state);
     // * handle the file state 
-    const [file, setFile] = React.useState<StatePropsType>('');
-
-    const [prompt, setPrompt] = React.useState<StatePropsType>("");
-
-    const [generatingImg, setGeneratingImg] = React.useState<boolean>(false);
+    const [file, setFile] = React.useState<File | null>(null);
 
     const [activeEditorTab, setActiveEditorTab] = React.useState<StatePropsType>('');
 
@@ -47,8 +40,13 @@ const Customeizer = () => {
                     setFile={setFile}
                     readFile={readFile}
                 />
-            case 'aipicker':
-                return <AIPicker />
+            // case 'aipicker':
+            //     return <AIPicker
+            //         prompt={prompt}
+            //         setPrompt={setPrompt}
+            //         generateingImg={generatingImg}
+            //         handleSubmit={handleSubmit}
+            //     />
 
             default:
                 return null
@@ -68,6 +66,7 @@ const Customeizer = () => {
             default:
                 state.isLogoTexture = true;
                 state.isFullTexture = false;
+                break;
         }
         // ? after setting the state, activeFilterTab is updated
 

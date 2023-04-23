@@ -4,8 +4,8 @@ import CustomButton from './common/CustomButton.common';
 
 
 interface IFilePickerProps {
-    file: string;
-    setFile: React.Dispatch<React.SetStateAction<string>>;
+    file: File | null;
+    setFile: React.Dispatch<React.SetStateAction<File | null>>;
 
     readFile: Function
 }
@@ -19,14 +19,19 @@ const FilePicker = ({ file, setFile, readFile }: IFilePickerProps) => {
                     name="file"
                     id="file-upload"
                     accept='image/*'
-                    onChange={(e) => setFile(e.target.files[0])}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                            setFile(file);
+                        }
+                    }}
                 />
                 <label htmlFor='file-upload' className={`filepicker-label`}>
                     Upload file
                 </label>
 
                 <p className={`mt-2 text-gray-500 text-xs truncate`}>
-                    {file === '' ? 'No file selected' : file.name}
+                    {file?.name === '' ? 'No file selected' : file?.name}
                 </p>
             </div>
             <div className={`mt-4 flex flex-wrap gap-3`}>

@@ -6,7 +6,7 @@ import state from "../../store/index.store";
 interface ICustomeButtonProps {
     type: string
     title: string;
-    handleClick: () => boolean;
+    handleClick?: () => any;
     customStyles: string
 }
 
