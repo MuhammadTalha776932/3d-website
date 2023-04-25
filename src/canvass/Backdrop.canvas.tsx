@@ -1,13 +1,12 @@
-import { easing } from 'maath'
-import { useFrame } from '@react-three/fiber'
-import { AccumulativeContext, AccumulativeShadows, RandomizedLight, accumulativeContext } from '@react-three/drei'
+import { AccumulativeShadows, RandomizedLight} from '@react-three/drei'
 import * as React from 'react'
 
 const Backdrop = () => {
-    const shadows = React.useRef<AccumulativeContext>();
+    const shadows = React.useRef(null);
+
     return (
         <AccumulativeShadows
-            ref={shadows}
+            ref={shadows || undefined}
             temporal
             frames={60}
             alphaTest={0.85}

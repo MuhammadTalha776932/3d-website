@@ -1,17 +1,21 @@
-import { GroupProps, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { easing } from 'maath'
 import { useSnapshot } from 'valtio'
 
 import React from 'react'
 import state from '../store/index.store'
-import { Group } from 'three'
+import * as THREE from 'three'
+
 interface ICameraRigProps {
     children: React.ReactNode
+}
+interface GroupProps {
+    ref?: React.Ref<THREE.Group> | undefined;
 }
 
 const CameraRig = ({ children }: ICameraRigProps) => {
 
-    const groups = React.useRef<GroupProps | undefined>();
+    const groups = React.useRef<GroupProps>();
     const snap = useSnapshot(state);
 
     useFrame((state, delta) => {
@@ -32,16 +36,24 @@ const CameraRig = ({ children }: ICameraRigProps) => {
         // * set model camera position
         easing.damp3(state.camera.position, targetPosition, 0.25, delta)
         // * set the model rotation smoothly
+        const { current } = groups;
+        const { rotation } = current as THREE.Group
         easing.dampE(
-            groups.current.rotation,
+            rotation || new THREE.Euler(), // use optional chaining to access rotation
             [state.pointer.y / 10, -state.pointer.x / 5, 0],
             0.25,
             delta,
         )
+        // easing.dampE(
+        //     groups.current.rotation,
+        //     [state.pointer.y / 10, -state.pointer.x / 5, 0],
+        //     0.25,
+        //     delta,
+        // )
     })
 
     return (
-        <group ref={groups}>
+        <group ref={groups as React.Ref<THREE.Group>}>
             {
                 children
             }

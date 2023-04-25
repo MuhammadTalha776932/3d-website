@@ -3,8 +3,8 @@ import { useSnapshot } from 'valtio'
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Decal, useGLTF, useTexture, } from '@react-three/drei'
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import React from 'react'
+import {GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
 import state from '../store/index.store';
 
 
@@ -12,20 +12,24 @@ import state from '../store/index.store';
 const Shirt = () => {
     type GLTFResult = GLTF & {
         nodes: {
+            [x: string]: any;
             Suzanne: THREE.Mesh
         }
         materials: {
+            [x: string]: any;
             ['Material.001']: THREE.MeshStandardMaterial
         }
     }
+
+    
     const snap = useSnapshot(state);
 
-    const { nodes, materials } = useGLTF('/shirt_baked.glb') as unknown as GLTFResult;
+    const { nodes, materials, } = useGLTF('/shirt_baked.glb') as unknown as GLTFResult;
 
     const logoTexture = useTexture(snap.logoDecal);
     const fullTexture = useTexture(snap.fullDecal);
 
-    useFrame((state, delta) => easing.dampC(materials.lambert1.color, snap.color, 0.25, delta));
+    useFrame((_, delta) => easing.dampC(materials.lambert1.color, snap.color, 0.25, delta));
 
     const stateString = JSON.stringify(snap);
     return (

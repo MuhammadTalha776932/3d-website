@@ -1,5 +1,5 @@
 import { Transition } from "framer-motion"
-export const transition: Transition = { type: "spring", duration: 5, mass: 1, bounce: 0.50 };
+export const transition: Transition = { type: "spring", duration: 5, bounce: 0.50 };
 
 export const slideAnimation = (direction: string) => {
   return {
