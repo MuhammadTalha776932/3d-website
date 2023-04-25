@@ -2,7 +2,7 @@ import { useSnapshot } from 'valtio';
 import { ITabs } from '../../config/constants'
 
 import state from '../../store/index.store';
-import React, { MouseEventHandler } from 'react'
+import { MouseEventHandler } from 'react'
 
 
 interface ITabProps {
