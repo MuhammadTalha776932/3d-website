@@ -1,6 +1,7 @@
-export const transition = { type: "spring", duration: 0.8 };
+import { Transition } from "framer-motion"
+export const transition: Transition = { type: "spring", duration: 5, mass: 1, bounce: 0.50 };
 
-export const slideAnimation = (direction) => {
+export const slideAnimation = (direction: string) => {
   return {
     initial: {
       x: direction === "left" ? -100 : direction === "right" ? 100 : 0,
@@ -50,7 +51,7 @@ export const headTextAnimation = {
 };
 
 export const headContentAnimation = {
-  initial: { y: 100, opacity: 0 },
+  initial: { y: 0, opacity: 0 },
   animate: { y: 0, opacity: 1 },
   transition: {
     type: "spring",

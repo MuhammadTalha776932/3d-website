@@ -1,15 +1,22 @@
-import Canvas from "./canvas/canvas.index";
+import CanvasIndex from "./canvass/Canvas.index";
 import Customeizer from "./pages/Customeizer.pages";
 import Home from "./pages/Home.pages";
+import React from "react";
 
 
 const App: () => JSX.Element = (): JSX.Element => {
+
+
   return (
+
     <main className={`app transition-all ease-in`}>
-      <Home />
-      <Canvas />
-      <Customeizer />
+      <React.Fragment>
+        <Home />
+        <CanvasIndex />
+        <Customeizer />
+      </React.Fragment>
     </main>
+
   )
 }
 
